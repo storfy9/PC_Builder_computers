@@ -289,7 +289,7 @@ class FullDataBaseWindow(ttk.Toplevel):
             self.open_add_mother_window,
             self.open_edit_processor_window,
 
-            'Список материнских плат: ',
+            'Список процессоров: ',
             'id',
             'type',
             'socket').grid(row=0, column=0, padx=10)
@@ -298,7 +298,7 @@ class FullDataBaseWindow(ttk.Toplevel):
             1,
             self.open_add_processor_window,
             self.open_edit_mother_window,
-            'Список процессоров: ',
+            'Список материнских плат: ',
             'id',
             'type',
             'frequency').grid(row=0, column=1, padx=10)
@@ -309,7 +309,7 @@ class FullDataBaseWindow(ttk.Toplevel):
             self.open_edit_computer_window,
             'Список заказов: ',
             'id',
-            'name',
+            'number',
             'status',
             'proc',
             'moth').grid(row=1, column=0, padx=10)
@@ -320,7 +320,8 @@ class FullDataBaseWindow(ttk.Toplevel):
             self.open_edit_friend_window,
             'Список клиентов: ',
             'id',
-            'name').grid(row=1, column=1, padx=10)
+            'name',
+            'number').grid(row=1, column=1, padx=10)
 
     def open_add_mother_window(self):
         """Открывет окно добавления материнской платы."""
