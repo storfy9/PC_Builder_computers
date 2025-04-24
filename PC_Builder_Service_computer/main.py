@@ -114,7 +114,7 @@ class App(ttk.Window):
             show='headings',
             bootstyle='danger'
         )
-        self.table_computers.heading('id', text='ID Заказа', anchor=tk.W)
+        self.table_computers.heading('id', text='Номер Заказа', anchor=tk.W)
         self.table_computers.heading('status', text='Статус', anchor=tk.W)
         self.table_computers.heading('processor', text='Процессор', anchor=tk.W)
         self.table_computers.heading('motherboard', text='Материнская плата', anchor=tk.W)
@@ -165,14 +165,14 @@ class App(ttk.Window):
         editor_window.focus()
 
     def insert_friends_data(self):
-        """Добавляет данные друзей в таблицу друзей."""
+        """Добавляет данные клиента в таблицу клиента."""
         self.clear_table(self.table_friends)
         self.data = self.friend_obj.read()
         for i in self.data:
             self.table_friends.insert(parent='', index=0, values=i)
 
     def select_friend_and_get_computers(self, event):
-        """Выводит список компьютеров при выборе друга."""
+        """Выводит список заказов при выборе клиента."""
         for i in self.table_friends.selection():
             self.table_updrater = self.table_friends.item(i)['values'][0]
             computers_id = self.friend_comp_obj.get_particular_friend_computer(
@@ -196,7 +196,7 @@ class App(ttk.Window):
                                                         )
 
     def update_table(self):
-        """Обновляет таблицу с компьютерами друзей."""
+        """Обновляет таблицу с заказами клиента."""
         self.clear_table(self.table_computers)
         computers_id = self.friend_comp_obj.get_particular_friend_computer(
             self.table_updrater
@@ -343,7 +343,7 @@ class FullDataBaseWindow(ttk.Toplevel):
         add_comp_window.focus()
 
     def open_add_friend_window(self):
-        """Открывет окно добавления друга."""
+        """Открывет окно добавления клиента."""
         global add_friend_window
         add_friend_window = AddFriendWindow()
         add_friend_window.position_center()
@@ -364,14 +364,14 @@ class FullDataBaseWindow(ttk.Toplevel):
         edit_proc_window.focus()
 
     def open_edit_computer_window(self):
-        """Открывет окно реадктирования компьютера."""
+        """Открывет окно реадктирования заказа."""
         global edit_computer_window
         edit_computer_window = EditComputersWindow()
         edit_computer_window.position_center()
         edit_computer_window.focus()
 
     def open_edit_friend_window(self):
-        """Открывет окно реадктирования друга."""
+        """Открывет окно реадктирования клиента."""
         global edit_friend_window
         edit_friend_window = EditFriendWindow()
         edit_friend_window.position_center()
@@ -603,7 +603,7 @@ class AddProcessorWindow(ttk.Toplevel):
 
 
 class AddCompuerWindow(ttk.Toplevel):
-    """Создает окно добавления компьютера."""
+    """Создает окно добавления заказа."""
 
     def __init__(self):
         super().__init__()
@@ -769,18 +769,18 @@ class AddCompuerWindow(ttk.Toplevel):
         return self.proc_id
 
     def cancel(self):
-        """Закрывает окно добавления компьютера."""
+        """Закрывает окно добавления заказа."""
         add_comp_window.destroy()
 
     def add_computer(self):
-        """Добавляет в БД новую запись о компьютере."""
+        """Добавляет в БД новую запись о заказе."""
         try:
             name = self.pc_type.get()
             status = self.radio_var.get()
             moth_id = self.moth_id
             proc_id = self.proc_id
             if not self.validator.validate_name_and_status(name):
-                self.error.set('*Ошибка в названии компьютера')
+                self.error.set('*Ошибка в названии заказа')
                 self.success.set('')
             elif type(moth_id) != int or type(proc_id) != int:
                 self.error.set('*Не выбрана материнская плата или процессор')
@@ -795,13 +795,13 @@ class AddCompuerWindow(ttk.Toplevel):
             self.success.set('')
 
     def update_editor(self):
-        """Обновляет таблицу компьютеров в окне режима редактора."""
+        """Обновляет таблицу заказов в окне режима редактора."""
         editor_window.__dict__['children']['!fulldataframes3'].delete_data()
         editor_window.__dict__['children']['!fulldataframes3'].insert_data()
 
 
 class AddFriendWindow(ttk.Toplevel):
-    """Создает окно добавления друга."""
+    """Создает окно добавления клиента."""
 
     def __init__(self):
         super().__init__()
@@ -882,27 +882,27 @@ class AddFriendWindow(ttk.Toplevel):
             )
 
     def cancel(self):
-        """Закрывает окно добавления друга."""
+        """Закрывает окно добавления клиента."""
         add_friend_window.destroy()
 
     def add_friend(self):
-        """Добавляет в БД новую запись о друге."""
+        """Добавляет в БД новую запись о клиенте."""
         name = self.name_var.get().replace(' ', '_')
         if not self.validator.validate_name(name):
             self.success.set('')
-            self.error.set('*Имя друга содержит недопустимые символы')
+            self.error.set('*Имя клиента содержит недопустимые символы')
         elif not self.validator.validate_unique_name(name):
             self.success.set('')
-            self.error.set('*Друг с таким именем уже есть в базе данных')
+            self.error.set('*Клиент с таким именем уже есть в базе данных')
         else:
-            self.success.set('Добавлен друг и его компьютер')
+            self.success.set('Добавлен клиент и его заказ')
             self.error.set('')
             self.friend_obj.create(name)
             self.update_editor()
             main_window.insert_friends_data()
 
     def update_editor(self):
-        """Обновляет таблицу друзей в окне режима редактора."""
+        """Обновляет таблицу клиентов в окне режима редактора."""
         editor_window.__dict__['children']['!fulldataframes4'].delete_data()
         editor_window.__dict__['children']['!fulldataframes4'].insert_data()
 
@@ -1307,7 +1307,7 @@ class EditProcessorWindow(ttk.Toplevel):
 
 
 class EditComputersWindow(ttk.Toplevel):
-    """Создает окно редактирования компьютеров."""
+    """Создает окно редактирования заказа."""
 
     def __init__(self):
         super().__init__()
@@ -1344,7 +1344,7 @@ class EditComputersWindow(ttk.Toplevel):
         # Виджеты
         ttk.Label(
             self,
-            text='Редактировать компьютер: ').grid(
+            text='Редактировать заказ: ').grid(
             row=0,
             column=0,
             columnspan=2,
@@ -1374,7 +1374,7 @@ class EditComputersWindow(ttk.Toplevel):
 
         ttk.Label(
             self,
-            text='Поменять статус компьютера: ').grid(
+            text='Поменять статус заказа: ').grid(
             row=2,
             column=0,
             columnspan=2,
@@ -1384,7 +1384,7 @@ class EditComputersWindow(ttk.Toplevel):
 
         ttk.Radiobutton(
             self,
-            text='Исправен',
+            text='Создан',
             value=1,
             variable=self.radio_var).grid(
             row=3,
@@ -1394,7 +1394,7 @@ class EditComputersWindow(ttk.Toplevel):
             )
         ttk.Radiobutton(
             self,
-            text='Неисправен',
+            text='Закрыт',
             value=0,
             variable=self.radio_var).grid(
             row=3,
@@ -1486,17 +1486,17 @@ class EditComputersWindow(ttk.Toplevel):
             )
 
     def cancel(self):
-        """Закрывает окно редактирования компьютеров."""
+        """Закрывает окно редактирования заказа."""
         edit_computer_window.destroy()
 
     def delete(self):
-        """Удаляет запись в БД о данном компьютере."""
+        """Удаляет запись в БД о данном заказе."""
         if not self.comp_id:
-            self.error.set('Выберите компьютер, который хотите удалить')
+            self.error.set('Выберите заказ, который хотите удалить')
             self.success.set('')
         else:
             self.error.set('')
-            self.success.set(f'Компьютер {self.comp_var.get()} успешно удален')
+            self.success.set(f'Заказ {self.comp_var.get()} успешно удален')
             self.comp_obj.delete(self.comp_id)
             self.update_editor()
             self.comp_id = None
@@ -1546,7 +1546,7 @@ class EditComputersWindow(ttk.Toplevel):
             pass
 
     def save(self):
-        """Обновляет запись в БД выбранного компьютера."""
+        """Обновляет запись в БД выбранного заказа."""
         if not self.validator.validate_name_and_status(self.name):
             self.error.set('Введенено неверное id заказа')
             self.success.set('')
@@ -1572,7 +1572,7 @@ class EditComputersWindow(ttk.Toplevel):
 
 
 class EditFriendWindow(ttk.Toplevel):
-    """Создает окно редактирования друзей."""
+    """Создает окно редактирования клиента."""
 
     def __init__(self):
         super().__init__()
@@ -1646,8 +1646,8 @@ class EditFriendWindow(ttk.Toplevel):
                 'motherboard'
             ),
             show='headings', bootstyle='danger')
-        self.friend_table.heading('id', text='ID компьютера', anchor=tk.W)
-        self.friend_table.heading('name', text='Имя компьютера', anchor=tk.W)
+        self.friend_table.heading('id', text='ID заказа', anchor=tk.W)
+        self.friend_table.heading('name', text='Номер заказа', anchor=tk.W)
         self.friend_table.heading('status', text='Закрыт', anchor=tk.W)
         self.friend_table.heading(
             'motherboard', text='Материнская плата', anchor=tk.W
@@ -1718,7 +1718,7 @@ class EditFriendWindow(ttk.Toplevel):
         self.comp_combo.bind('<<ComboboxSelected>>', self.edit_comp)
 
     def delete_friend(self):
-        """Удаляет запись о друге из БД."""
+        """Удаляет запись о клиенте из БД."""
         if not self.validator.validate_id(self.friend_id):
             self.error.set('*Вы не выбрали клиента')
             self.success.set('')
@@ -1749,12 +1749,12 @@ class EditFriendWindow(ttk.Toplevel):
             self.update_table()
 
     def update_combo(self):
-        """Обновляет выпадающие списки для друга и его компьютера."""
+        """Обновляет выпадающие списки для клиента и его заказа."""
         self.friend_combo['values'] = self.get_item()[0]
         self.comp_combo['values'] = self.get_item()[1]
 
     def add_comp_to_friend(self):
-        """Добавляет компьютер другу."""
+        """Добавляет заказ клиенту."""
         computers_id = self.friend_comp_obj.get_particular_friend_computer(
             self.friend_id
             )
@@ -1772,7 +1772,7 @@ class EditFriendWindow(ttk.Toplevel):
             main_window.update_table()
 
     def update_table(self):
-        """Обновляет таблицы в окне редактора друга."""
+        """Обновляет таблицы в окне редактора клиента."""
         self.clear_table(self.friend_table)
         computers_id = self.friend_comp_obj.get_particular_friend_computer(
             self.friend_id
@@ -1785,12 +1785,12 @@ class EditFriendWindow(ttk.Toplevel):
                 self.friend_table.insert(parent='', index=0, values=data)
 
     def edit_comp(self, event):
-        """Устанавливает ID выбранного компьютера друга."""
+        """Устанавливает ID выбранного заказа клиента."""
         data = self.comp_combo.get().split()
         self.comp_id = int(data[0])
 
     def edit_friend(self, event):
-        """Устанавливает ID выбранного друга."""
+        """Устанавливает ID выбранного клиента."""
         data = self.friend_combo.get().split()
         self.friend_id = int(data[0])
         self.update_table()
@@ -1818,7 +1818,7 @@ class EditFriendWindow(ttk.Toplevel):
             )
 
     def cancel(self):
-        """Закрывает окно редактора друзей."""
+        """Закрывает окно редактора клиента."""
         edit_friend_window.destroy()
 
 

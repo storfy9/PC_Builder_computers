@@ -6,7 +6,7 @@ PATH = os.path.dirname(os.path.abspath(__file__)) + r"\data\database.db"
 
 
 class Friends:
-    """Реализует CRUD для таблицы друзей в БД."""
+    """Реализует CRUD для таблицы клиентов в БД."""
 
     def create(self, name):
         """Создает нового друга в БД,"""
@@ -15,7 +15,7 @@ class Friends:
             cur.execute(f"INSERT INTO friend (name) VALUES('{name}');")
 
     def read(self, *args):
-        """Возвращает данные из БД о друзьях."""
+        """Возвращает данные из БД о клиентах."""
         if len(args) == 0:
             with sq.connect(PATH) as con:
                 cur = con.cursor()
@@ -28,7 +28,7 @@ class Friends:
                 return cur.fetchone()
 
     def update(self, id, name):
-        """Обновляет данные о друге в БД."""
+        """Обновляет данные о клиенте в БД."""
         with sq.connect(PATH) as con:
             cur = con.cursor()
             cur.execute(f"""
@@ -38,17 +38,17 @@ class Friends:
             """)
 
     def delete(self, id):
-        """Удаляет данные о друге в БД,"""
+        """Удаляет данные о клиенте в БД,"""
         with sq.connect(PATH) as con:
             cur = con.cursor()
             cur.execute(f"DELETE FROM friend WHERE id='{id}';")
 
 
 class Friend_Computer:
-    """Является промежуточной таблицой между друзьями и клмпьютерами."""
+    """Является промежуточной таблицой между клиентами и дркзьями"""
 
     def add_computer_to_friend(self, friend_id, comp_id):
-        """Добавляет компьютер другу."""
+        """Добавляет заказ клиенту."""
         with sq.connect(PATH) as con:
             cur = con.cursor()
             cur.execute(
@@ -56,7 +56,7 @@ class Friend_Computer:
                 )
 
     def get_list_of_friend_compters(self):
-        """Возвращает список компьютеров друзей."""
+        """Возвращает список заказов клиенту."""
         with sq.connect(PATH) as con:
             cur = con.cursor()
             cur.execute("""
@@ -68,7 +68,7 @@ class Friend_Computer:
             print(cur.fetchall())
 
     def get_particular_friend_computer(self, id):
-        """Возвращает список компьютеров для друга."""
+        """Возвращает список заказа для килента."""
         with sq.connect(PATH) as con:
             cur = con.cursor()
             cur.execute(f"""
